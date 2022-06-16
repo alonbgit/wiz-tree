@@ -1,10 +1,13 @@
 import React, { useState, } from 'react';
 import classNames from 'classnames';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import Collapse from '@mui/material/Collapse';
 import { TreeNodeType } from '../../types/types';
 
 import './tree.scss';
 import './tree-node/tree-node.scss';
+
+const DEFAULT_AVATAR = 'https://i.stack.imgur.com/l60Hf.png';
 
 interface Props {
     className?: string;
@@ -59,7 +62,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     className = '',
     title,
     description,
-    avatarUrl,
+    avatarUrl = DEFAULT_AVATAR,
     nodes,
     isOpen = false,
     level,
@@ -102,11 +105,12 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                 )}
             </div>
             {nodes && (
-                <Tree
-                    nodes={nodes}
-                    level={level}
-                    className={classNames({ 'tree--hidden': !isNodeOpen })}
-                />
+                <Collapse in={isNodeOpen}>
+                    <Tree
+                        nodes={nodes}
+                        level={level}
+                    />
+                </Collapse>
             )}
         </li>
     )
