@@ -26,6 +26,7 @@ const tree: TreeNodeType[] = [
         title: 'Tel-Aviv Admins',
         description: '1 voted out of 3',
         avatarUrl: 'https://images.megapixl.com/4684/46846368.jpg',
+        isOpen: true,
         nodes: [
             {
                 id: '5',

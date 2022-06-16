@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, } from 'react';
 import classNames from 'classnames';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { TreeNodeType } from '../../types/types';
 
 import './tree.scss';
@@ -26,6 +27,7 @@ const Tree: React.FC<Props> = ({
                 description,
                 avatarUrl,
                 nodes,
+                isOpen,
             } = treeNode;
             return (
                 <TreeNode
@@ -34,6 +36,7 @@ const Tree: React.FC<Props> = ({
                     description={description}
                     avatarUrl={avatarUrl}
                     nodes={nodes}
+                    isOpen={isOpen}
                     className='tree__node'
                     level={level + 1}
                 />
@@ -48,6 +51,7 @@ interface TreeNodeProps {
     description: string;
     avatarUrl?: string;
     nodes?: TreeNodeType[];
+    isOpen?: boolean;
     level: number;
 }
 
@@ -57,9 +61,18 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     description,
     avatarUrl,
     nodes,
+    isOpen = false,
     level,
 }) => {
     const padding = level === 1 ? 15 : 30;
+
+    const [isNodeOpen, setIsNodeOpen] = useState<boolean>(isOpen);
+
+    const onNodeClick = () => {
+        if (nodes) {
+            setIsNodeOpen(!isNodeOpen);
+        }
+    }
 
     return (
         <li className={classNames('tree-node', className)}>
@@ -68,6 +81,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                 style={{
                     paddingLeft: `${(level * padding)}px`
                 }}
+                onClick={onNodeClick}
             >
                 <img
                     className='tree-node__avatar'
@@ -81,11 +95,17 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                         {description}
                     </span>
                 </div>
+                {nodes && (
+                    <ArrowDownwardIcon className={classNames('tree-node__arrow', {
+                        'tree-node__arrow--open': isNodeOpen
+                    })}/>
+                )}
             </div>
             {nodes && (
                 <Tree
                     nodes={nodes}
                     level={level}
+                    className={classNames({ 'tree--hidden': !isNodeOpen })}
                 />
             )}
         </li>

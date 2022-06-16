@@ -4,4 +4,5 @@ export interface TreeNodeType {
     description: string;
     avatarUrl?: string;
     nodes?: TreeNodeType[];
+    isOpen?: boolean;
 }
