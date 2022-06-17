@@ -40,9 +40,17 @@
         color: #919091;
     }
 
-    &__arrow {
+    &__right-panel {
         margin-left: auto;
- 
+        display: flex;
+        align-items: center;
+    }
+
+    &__loading {
+        margin-right: 12px;
+    }
+
+    &__arrow {
         &--open {
             transform: rotate(180deg);
         }

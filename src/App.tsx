@@ -89,6 +89,7 @@ function App() {
         <Tree
           nodes={fileNodes}
           onSelect={onFileSelect}
+          showLoading
         />
         <h2>
           Simple tree without remote fetching with hardcoded data

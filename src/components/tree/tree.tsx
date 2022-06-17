@@ -2,6 +2,7 @@ import React, { useState, } from 'react';
 import classNames from 'classnames';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import Collapse from '@mui/material/Collapse';
+import CircularProgress from '@mui/material/CircularProgress';
 import { TreeNodeType } from '../../types/types';
 
 import './tree.scss';
@@ -14,6 +15,7 @@ interface Props {
     nodes: TreeNodeType[];
     onSelect?: (id: string) => void;
     level?: number;
+    showLoading?: boolean;
 }
 
 const Tree: React.FC<Props> = ({
@@ -21,46 +23,41 @@ const Tree: React.FC<Props> = ({
     nodes = [],
     onSelect,
     level = 0,
-}) => {
-    const onNodeSelect = (id: string) => {
-        if (onSelect) {
-            onSelect(id);
-        }
-    }
+    showLoading = false,
+}) => (
+    <ul
+        className={classNames('tree', className)}
+    >
+        {nodes.map((treeNode) => {
+            const {
+                id,
+                title,
+                description,
+                avatarUrl,
+                nodes,
+                hasNodes,
+                isOpen,
+            } = treeNode;
+            return (
+                <TreeNode
+                    key={id}
+                    title={title}
+                    description={description}
+                    avatarUrl={avatarUrl}
+                    nodes={nodes}
+                    hasNodes={hasNodes}
+                    isOpen={isOpen}
+                    onSelect={onSelect}
+                    className='tree__node'
+                    level={level + 1}
+                    id={id}
+                    showLoading={showLoading}
+                />
+            )
+        })}
+    </ul>
+)
 
-    return (
-        <ul
-            className={classNames('tree', className)}
-        >
-            {nodes.map((treeNode) => {
-                const {
-                    id,
-                    title,
-                    description,
-                    avatarUrl,
-                    nodes,
-                    hasNodes,
-                    isOpen,
-                } = treeNode;
-                return (
-                    <TreeNode
-                        key={id}
-                        title={title}
-                        description={description}
-                        avatarUrl={avatarUrl}
-                        nodes={nodes}
-                        hasNodes={hasNodes}
-                        isOpen={isOpen}
-                        onSelect={(id) => onNodeSelect(id)}
-                        className='tree__node'
-                        level={level + 1}
-                        id={id}
-                    />
-                )
-            })}
-        </ul>
-    )
-}
 
 interface TreeNodeProps {
     className?: string;
@@ -73,6 +70,7 @@ interface TreeNodeProps {
     onSelect?: (id: string) => void;
     level: number;
     id: string;
+    showLoading?: boolean;
 }
 
 const TreeNode: React.FC<TreeNodeProps> = ({
@@ -86,16 +84,33 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     onSelect,
     level,
     id,
+    showLoading = false,
 }) => {
     const padding = level === 1 ? 15 : 30;
 
     const [isNodeOpen, setIsNodeOpen] = useState<boolean>(isOpen);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const hasChildren = hasNodes || nodes;
+
+    const startLoading = () => {
+        if (showLoading) {
+            setIsLoading(true);
+        }
+    }
+
+    const stopLoading = () => {
+        if (showLoading) {
+            setIsLoading(false);
+        }
+    }
+
     const onNodeClick = async (e) => {
         e.stopPropagation();
         if (onSelect) {
+            startLoading();
             await onSelect(id);
+            stopLoading();
         }
         if (hasChildren) {
             setIsNodeOpen(!isNodeOpen);
@@ -123,11 +138,19 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                         {description}
                     </span>
                 </div>
-                {hasChildren && (
-                    <ArrowDownwardIcon className={classNames('tree-node__arrow', {
-                        'tree-node__arrow--open': isNodeOpen
-                    })}/>
-                )}
+                <div className='tree-node__right-panel'>
+                    {showLoading && isLoading && (
+                        <CircularProgress
+                            className='tree-node__loading'
+                            size={24}
+                        />
+                    )}
+                    {hasChildren && (
+                        <ArrowDownwardIcon className={classNames('tree-node__arrow', {
+                            'tree-node__arrow--open': isNodeOpen
+                        })}/>
+                    )}
+                </div>
             </div>
             {nodes && (
                 <Collapse in={isNodeOpen}>
@@ -135,6 +158,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                         nodes={nodes}
                         onSelect={onSelect}
                         level={level}
+                        showLoading={showLoading}
                     />
                 </Collapse>
             )}
