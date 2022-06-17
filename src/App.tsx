@@ -23,7 +23,6 @@ function App() {
       const { uId } = file;
       newFilesMap[uId] = file;
     });
-    console.log('---newFilesMap-------', newFilesMap);
     setFilesMap(newFilesMap);
   }
 
