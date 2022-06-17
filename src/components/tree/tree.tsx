@@ -72,8 +72,13 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     const [isNodeOpen, setIsNodeOpen] = useState<boolean>(isOpen);
 
     const onNodeClick = () => {
-        if (nodes) {
-            setIsNodeOpen(!isNodeOpen);
+        setIsNodeOpen(!isNodeOpen);
+    }
+
+    let props = {}
+    if (nodes) {
+        props = {
+            onClick: onNodeClick,
         }
     }
 
@@ -84,7 +89,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                 style={{
                     paddingLeft: `${(level * padding)}px`
                 }}
-                onClick={onNodeClick}
+                {...props}
             >
                 <img
                     className='tree-node__avatar'
