@@ -1,20 +1,33 @@
 import httpService from './http-service';
 import { File, Files, MIMEFileTypesList, MIMEFileType } from '../types/types';
 
-const MIN_RANDOM_FILES = 0;
 const MAX_RANDOM_FILES = 5;
 
 class FilesService {
-    async fetchFiles (): Promise<Files> {
-        const randomFiles = this.generateRandomFiles();
+    static uId = 1;
+
+    async fetchRootFiles (): Promise<Files> {
+        const randomFiles = this.generateRandomFiles(5);
         const files = await httpService.get<Files>(randomFiles);
         return files;
     }
 
+    async fetchFiles (): Promise<Files> {
+        const randomFiles = this.generateRandomFiles(0);
+        const files = await httpService.get<Files>(randomFiles);
+        return files;
+    }
+
+    private generateUId = () => {
+        const newUId = `dir-${FilesService.uId}`;
+        FilesService.uId++;
+        return newUId;
+    }
+
     private generateRandomNumber = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min; 
 
-    private generateRandomFiles (): Files {
-        const numberOfFiles = this.generateRandomNumber(MIN_RANDOM_FILES, MAX_RANDOM_FILES);
+    private generateRandomFiles (minFiles): Files {
+        const numberOfFiles = this.generateRandomNumber(minFiles, MAX_RANDOM_FILES);
         const files: Files = [];
         for (let i = 0; i < numberOfFiles; i++) {
             const lastModifiedDate = this.generateRandomDate()
@@ -23,16 +36,19 @@ class FilesService {
                 lastModifiedDate,
                 name: this.generateRandomFileName(),
                 size: this.generateRandomSize(),
-                type: this.generateRandomMIMEType(),
                 isDirectory: this.generateIsDirectory(),
+                uId:  this.generateUId(),
             }
+            if (!file.isDirectory) {
+                file.type = this.generateRandomMIMEType();
+            } 
             files.push(file);
         }
         return files;
     }
 
     private generateRandomMIMEType (): MIMEFileType {
-        const rand = this.generateRandomNumber(0, MIMEFileTypesList.length);
+        const rand = this.generateRandomNumber(0, MIMEFileTypesList.length - 1);
         return MIMEFileTypesList[rand] as MIMEFileType;
     }
 
