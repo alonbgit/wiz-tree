@@ -1,22 +1,14 @@
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Tree from './components/tree/tree';
 import TreeNodes from './config/tree-nodes';
 import filesService from './services/files-service';
-import { TreeNodeType, Files, File, MIMEFileType } from './types/types';
+import { TreeNodeType, Files, File } from './types/types';
 import { getIconByFile } from './services/file-type-icons';
 
 import './App.scss';
 
 function App() {
   const [filesMap, setFilesMap] = useState<Files>([]);
-
-  useEffect(() => {
-    const initRoots = async () => {
-      const rootFiles = await filesService.fetchRootFiles();
-      updateFilesMap(rootFiles);
-    }
-    initRoots();
-  }, []);
 
   const updateFilesMap = (files: Files) => {
     const newFilesMap: Files = {...filesMap};
@@ -27,6 +19,14 @@ function App() {
     setFilesMap(newFilesMap);
   }
 
+  useEffect(() => {
+    const initRoots = async () => {
+      const rootFiles = await filesService.fetchRootFiles();
+      updateFilesMap(rootFiles);
+    }
+    initRoots();
+  }, []);
+
   const getDescription = (file: File): string => {
     const { lastModifiedDate, size, type, isDirectory } = file;
     let description = `Last Modified: ${lastModifiedDate.toLocaleDateString('en-US')}, size: ${size}`;
@@ -34,6 +34,18 @@ function App() {
       description = `${description}, MIME: ${type}`;
     }
     return description;
+  }
+
+  const createTreeNodeFromFile = (file: File) => {
+    const { uId, name, isDirectory } = file;
+    const treeNode: TreeNodeType = {
+      id: uId,
+      title: name,
+      description: getDescription(file),
+      hasNodes: isDirectory,
+      avatar: getIcon(file),
+    }
+    return treeNode;
   }
 
   const fillNode = (treeNode: TreeNodeType, file: File, treeNodes: TreeNodeType[]) => {
@@ -50,18 +62,6 @@ function App() {
   const getIcon = (file: File) => {
     const Icon = getIconByFile(file);
     return <Icon color='primary' />;
-  }
-
-  const createTreeNodeFromFile = (file: File) => {
-    const { uId, name, isDirectory } = file;
-    const treeNode: TreeNodeType = {
-      id: uId,
-      title: name,
-      description: getDescription(file),
-      hasNodes: isDirectory,
-      avatar: getIcon(file),
-    }
-    return treeNode;
   }
 
   const fileNodes = useMemo((): TreeNodeType[] => {
