@@ -89,20 +89,24 @@ function App() {
   return (
     <div className='App'>
       <div className='tree-container'>
-        <h2>
-          Files directory with remote fetching from fake server
-        </h2>
-        <Tree
-          nodes={fileNodes}
-          onSelect={onFileSelect}
-          showLoading
-        />
-        <h2>
-          Simple tree without remote fetching with hardcoded data
-        </h2>
-        <Tree
-          nodes={TreeNodes}
-        />
+        <div className='tree-section'>
+          <h2>
+            Files directory with remote fetching from fake server
+          </h2>
+          <Tree
+            nodes={fileNodes}
+            onSelect={onFileSelect}
+            showLoading
+          />
+        </div>
+        <div className='tree-section'>
+          <h2>
+            Simple tree without remote fetching with hardcoded data
+          </h2>
+          <Tree
+            nodes={TreeNodes}
+          />
+        </div>
       </div>
     </div>
   );
