@@ -107,6 +107,9 @@ const TreeNode: React.FC<TreeNodeProps> = ({
 
     const onNodeClick = async (e) => {
         e.stopPropagation();
+        if (isLoading) {
+            return;
+        }
         if (onSelect) {
             startLoading();
             await onSelect(id);
