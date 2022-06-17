@@ -2,7 +2,8 @@ import { useEffect, useState, useMemo, useRef } from 'react';
 import Tree from './components/tree/tree';
 import TreeNodes from './config/tree-nodes';
 import filesService from './services/files-service';
-import { TreeNodeType, Files, File } from './types/types';
+import { TreeNodeType, Files, File, MIMEFileType } from './types/types';
+import { getIconByFile } from './services/file-type-icons';
 
 import './App.scss';
 
@@ -46,6 +47,11 @@ function App() {
     }
   }
 
+  const getIcon = (file: File) => {
+    const Icon = getIconByFile(file);
+    return <Icon color='primary' />;
+  }
+
   const createTreeNodeFromFile = (file: File) => {
     const { uId, name, isDirectory } = file;
     const treeNode: TreeNodeType = {
@@ -53,6 +59,7 @@ function App() {
       title: name,
       description: getDescription(file),
       hasNodes: isDirectory,
+      avatar: getIcon(file),
     }
     return treeNode;
   }

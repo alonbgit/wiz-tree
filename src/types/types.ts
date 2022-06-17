@@ -1,8 +1,10 @@
+import React from 'react';
+
 export interface TreeNodeType {
     id: string;
     title: string;
     description: string;
-    avatarUrl?: string;
+    avatar?: string | any;
     nodes?: TreeNodeType[];
     hasNodes?: boolean;
     isOpen?: boolean;
@@ -31,6 +33,7 @@ export const MIMEFileTypesList = [
     'audio/mpeg',
     'application/pdf',
     'application/zip',
+    'video/mp4',
 ]
 
 export type MIMEFileType =
@@ -41,4 +44,5 @@ export type MIMEFileType =
     'text/html' |
     'audio/mpeg' |
     'application/pdf' |
-    'application/zip';
+    'application/zip' |
+    'video/mp4'

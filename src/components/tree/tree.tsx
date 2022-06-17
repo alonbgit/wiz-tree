@@ -33,7 +33,7 @@ const Tree: React.FC<Props> = ({
                 id,
                 title,
                 description,
-                avatarUrl,
+                avatar,
                 nodes,
                 hasNodes,
                 isOpen,
@@ -43,7 +43,7 @@ const Tree: React.FC<Props> = ({
                     key={id}
                     title={title}
                     description={description}
-                    avatarUrl={avatarUrl}
+                    avatar={avatar}
                     nodes={nodes}
                     hasNodes={hasNodes}
                     isOpen={isOpen}
@@ -63,7 +63,7 @@ interface TreeNodeProps {
     className?: string;
     title: string;
     description: string;
-    avatarUrl?: string;
+    avatar?: string | any;
     nodes?: TreeNodeType[];
     hasNodes?: boolean;
     isOpen?: boolean;
@@ -77,7 +77,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     className = '',
     title,
     description,
-    avatarUrl = DEFAULT_AVATAR,
+    avatar = DEFAULT_AVATAR,
     nodes,
     hasNodes = false,
     isOpen = false,
@@ -126,10 +126,16 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                 }}
                 onClick={onNodeClick}
             >
-                <img
-                    className='tree-node__avatar'
-                    src={avatarUrl}
-                />
+                {typeof avatar === 'string' ? (
+                    <img
+                        className='tree-node__avatar'
+                        src={avatar}
+                    />
+                ) : (
+                    <div className='tree-node__custom-avatar'>
+                        {avatar}
+                    </div>
+                )}
                 <div className='tree-node__content'>
                     <span className='tree-node__title'>
                         {title}
