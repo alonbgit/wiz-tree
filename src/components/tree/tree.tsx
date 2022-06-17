@@ -12,41 +12,57 @@ const DEFAULT_AVATAR = 'https://i.stack.imgur.com/l60Hf.png';
 interface Props {
     className?: string;
     nodes: TreeNodeType[];
+    isRemoteFetch?: boolean;
+    onSelect?: (id: string) => void;
     level?: number;
 }
 
 const Tree: React.FC<Props> = ({
     className = '',
     nodes = [],
+    isRemoteFetch = false,
+    onSelect,
     level = 0,
-}) => (
-    <ul
-        className={classNames('tree', className)}
-    >
-        {nodes.map((treeNode) => {
-            const {
-                id,
-                title,
-                description,
-                avatarUrl,
-                nodes,
-                isOpen,
-            } = treeNode;
-            return (
-                <TreeNode
-                    key={id}
-                    title={title}
-                    description={description}
-                    avatarUrl={avatarUrl}
-                    nodes={nodes}
-                    isOpen={isOpen}
-                    className='tree__node'
-                    level={level + 1}
-                />
-            )
-        })}
-    </ul>
-)
+}) => {
+    const onNodeSelect = (id: string) => {
+        if (onSelect) {
+            onSelect(id);
+        }
+    }
+
+    return (
+        <ul
+            className={classNames('tree', className)}
+        >
+            {nodes.map((treeNode) => {
+                const {
+                    id,
+                    title,
+                    description,
+                    avatarUrl,
+                    nodes,
+                    hasNodes,
+                    isOpen,
+                } = treeNode;
+                return (
+                    <TreeNode
+                        key={id}
+                        title={title}
+                        description={description}
+                        avatarUrl={avatarUrl}
+                        nodes={nodes}
+                        hasNodes={hasNodes}
+                        isOpen={isOpen}
+                        isRemoteFetch={isRemoteFetch}
+                        onSelect={() => onNodeSelect(id)}
+                        className='tree__node'
+                        level={level + 1}
+                    />
+                )
+            })}
+        </ul>
+    )
+}
 
 interface TreeNodeProps {
     className?: string;
@@ -54,7 +70,10 @@ interface TreeNodeProps {
     description: string;
     avatarUrl?: string;
     nodes?: TreeNodeType[];
+    hasNodes?: boolean;
     isOpen?: boolean;
+    onSelect?: () => void;
+    isRemoteFetch?: boolean;
     level: number;
 }
 
@@ -64,21 +83,24 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     description,
     avatarUrl = DEFAULT_AVATAR,
     nodes,
+    hasNodes = false,
+    isRemoteFetch = false,
     isOpen = false,
+    onSelect,
     level,
 }) => {
     const padding = level === 1 ? 15 : 30;
 
     const [isNodeOpen, setIsNodeOpen] = useState<boolean>(isOpen);
 
-    const onNodeClick = () => {
-        setIsNodeOpen(!isNodeOpen);
-    }
+    const hasChildren = (isRemoteFetch && hasNodes) || nodes;
 
-    let props = {}
-    if (nodes) {
-        props = {
-            onClick: onNodeClick,
+    const onNodeClick = async () => {
+        if (onSelect) {
+            await onSelect();
+        }
+        if (hasChildren) {
+            setIsNodeOpen(!isNodeOpen);
         }
     }
 
@@ -89,7 +111,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                 style={{
                     paddingLeft: `${(level * padding)}px`
                 }}
-                {...props}
+                onClick={onNodeClick}
             >
                 <img
                     className='tree-node__avatar'
@@ -103,7 +125,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                         {description}
                     </span>
                 </div>
-                {nodes && (
+                {hasChildren && (
                     <ArrowDownwardIcon className={classNames('tree-node__arrow', {
                         'tree-node__arrow--open': isNodeOpen
                     })}/>

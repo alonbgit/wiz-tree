@@ -25,7 +25,6 @@ const tree: TreeNodeType[] = [
         id: '4',
         title: 'Tel-Aviv Admins',
         description: '1 voted out of 3',
-        isOpen: true,
         nodes: [
             {
                 id: '5',
