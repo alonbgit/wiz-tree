@@ -23,7 +23,6 @@ const Tree: React.FC<Props> = ({
     level = 0,
 }) => {
     const onNodeSelect = (id: string) => {
-        debugger;
         if (onSelect) {
             onSelect(id);
         }
@@ -52,9 +51,10 @@ const Tree: React.FC<Props> = ({
                         nodes={nodes}
                         hasNodes={hasNodes}
                         isOpen={isOpen}
-                        onSelect={() => onNodeSelect(id)}
+                        onSelect={(id) => onNodeSelect(id)}
                         className='tree__node'
                         level={level + 1}
+                        id={id}
                     />
                 )
             })}
@@ -70,8 +70,9 @@ interface TreeNodeProps {
     nodes?: TreeNodeType[];
     hasNodes?: boolean;
     isOpen?: boolean;
-    onSelect?: () => void;
+    onSelect?: (id: string) => void;
     level: number;
+    id: string;
 }
 
 const TreeNode: React.FC<TreeNodeProps> = ({
@@ -84,16 +85,17 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     isOpen = false,
     onSelect,
     level,
+    id,
 }) => {
     const padding = level === 1 ? 15 : 30;
 
     const [isNodeOpen, setIsNodeOpen] = useState<boolean>(isOpen);
 
     const hasChildren = hasNodes || nodes;
-
-    const onNodeClick = async () => {
+    const onNodeClick = async (e) => {
+        e.stopPropagation();
         if (onSelect) {
-            await onSelect();
+            await onSelect(id);
         }
         if (hasChildren) {
             setIsNodeOpen(!isNodeOpen);
