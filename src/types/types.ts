@@ -17,7 +17,9 @@ export interface File {
     size: number;
     type?: MIMEFileType;
     isDirectory: boolean;
-    uId?: string;
+    uId: string;
+    files?: Files;
+    isRoot?: boolean;
 }
 
 export const MIMEFileTypesList = [

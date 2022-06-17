@@ -7,7 +7,7 @@ class FilesService {
     static uId = 1;
 
     async fetchRootFiles (): Promise<Files> {
-        const randomFiles = this.generateRandomFiles(5);
+        const randomFiles = this.generateRandomFiles(5, true);
         const files = await httpService.get<Files>(randomFiles);
         return files;
     }
@@ -26,7 +26,7 @@ class FilesService {
 
     private generateRandomNumber = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min; 
 
-    private generateRandomFiles (minFiles): Files {
+    private generateRandomFiles (minFiles, isRoot = false): Files {
         const numberOfFiles = this.generateRandomNumber(minFiles, MAX_RANDOM_FILES);
         const files: Files = [];
         for (let i = 0; i < numberOfFiles; i++) {
@@ -38,6 +38,7 @@ class FilesService {
                 size: this.generateRandomSize(),
                 isDirectory: this.generateIsDirectory(),
                 uId:  this.generateUId(),
+                isRoot,
             }
             if (!file.isDirectory) {
                 file.type = this.generateRandomMIMEType();

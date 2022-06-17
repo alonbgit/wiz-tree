@@ -12,7 +12,6 @@ const DEFAULT_AVATAR = 'https://i.stack.imgur.com/l60Hf.png';
 interface Props {
     className?: string;
     nodes: TreeNodeType[];
-    isRemoteFetch?: boolean;
     onSelect?: (id: string) => void;
     level?: number;
 }
@@ -20,11 +19,11 @@ interface Props {
 const Tree: React.FC<Props> = ({
     className = '',
     nodes = [],
-    isRemoteFetch = false,
     onSelect,
     level = 0,
 }) => {
     const onNodeSelect = (id: string) => {
+        debugger;
         if (onSelect) {
             onSelect(id);
         }
@@ -53,7 +52,6 @@ const Tree: React.FC<Props> = ({
                         nodes={nodes}
                         hasNodes={hasNodes}
                         isOpen={isOpen}
-                        isRemoteFetch={isRemoteFetch}
                         onSelect={() => onNodeSelect(id)}
                         className='tree__node'
                         level={level + 1}
@@ -73,7 +71,6 @@ interface TreeNodeProps {
     hasNodes?: boolean;
     isOpen?: boolean;
     onSelect?: () => void;
-    isRemoteFetch?: boolean;
     level: number;
 }
 
@@ -84,7 +81,6 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     avatarUrl = DEFAULT_AVATAR,
     nodes,
     hasNodes = false,
-    isRemoteFetch = false,
     isOpen = false,
     onSelect,
     level,
@@ -93,7 +89,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
 
     const [isNodeOpen, setIsNodeOpen] = useState<boolean>(isOpen);
 
-    const hasChildren = (isRemoteFetch && hasNodes) || nodes;
+    const hasChildren = hasNodes || nodes;
 
     const onNodeClick = async () => {
         if (onSelect) {
@@ -135,6 +131,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                 <Collapse in={isNodeOpen}>
                     <Tree
                         nodes={nodes}
+                        onSelect={onSelect}
                         level={level}
                     />
                 </Collapse>
