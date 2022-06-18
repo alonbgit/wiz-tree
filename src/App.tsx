@@ -4,6 +4,7 @@ import TreeNodes from './config/tree-nodes';
 import filesService from './services/files-service';
 import { TreeNodeType, Files, File } from './types/types';
 import { getIconByFile } from './services/file-type-icons';
+import FileDescription from './components/file-description/file-description';
 
 import './App.scss';
 
@@ -27,7 +28,10 @@ function App() {
     initRoots();
   }, []);
 
-  const getDescription = (file: File): string => {
+  const getDescription = (file: File): React.ReactNode => {
+    return (
+      <FileDescription file={file} />
+    );
     const { lastModifiedDate, size, type, isDirectory } = file;
     let description = `Last Modified: ${lastModifiedDate.toLocaleDateString('en-US')}, size: ${size}`;
     if (!isDirectory) {

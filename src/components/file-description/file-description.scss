@@ -1,0 +1,15 @@
+.file-description {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+
+    &__label {
+        font-weight: bold;
+        display: block;
+    }
+
+    &__value {
+        font-weight: normal;
+        margin: 0 5px;
+    }
+}

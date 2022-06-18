@@ -63,8 +63,8 @@ const Tree: React.FC<Props> = ({
 interface TreeNodeProps {
     className?: string;
     title: string;
-    description: string;
-    avatar?: string | any;
+    description: string | React.ReactNode;
+    avatar?: string | React.ReactNode;
     nodes?: TreeNodeType[];
     hasNodes?: boolean;
     isOpen?: boolean;
