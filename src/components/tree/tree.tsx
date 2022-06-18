@@ -11,55 +11,6 @@ import './tree-node/tree-node.scss';
 
 const DEFAULT_AVATAR = <AccountCircleIcon color='primary' />;
 
-interface Props {
-    className?: string;
-    nodes: TreeNodeType[];
-    onSelect?: (id: string) => void;
-    level?: number;
-    showLoading?: boolean;
-}
-
-const Tree: React.FC<Props> = ({
-    className = '',
-    nodes = [],
-    onSelect,
-    level = 0,
-    showLoading = false,
-}) => (
-    <ul
-        className={classNames('tree', className)}
-    >
-        {nodes.map((treeNode) => {
-            const {
-                id,
-                title,
-                description,
-                avatar,
-                nodes,
-                hasNodes,
-                isOpen,
-            } = treeNode;
-            return (
-                <TreeNode
-                    key={id}
-                    title={title}
-                    description={description}
-                    avatar={avatar}
-                    nodes={nodes}
-                    hasNodes={hasNodes}
-                    isOpen={isOpen}
-                    onSelect={onSelect}
-                    className='tree__node'
-                    level={level + 1}
-                    id={id}
-                    showLoading={showLoading}
-                />
-            )
-        })}
-    </ul>
-)
-
-
 interface TreeNodeProps {
     className?: string;
     title: string;
@@ -175,5 +126,53 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         </li>
     )
 }
+
+interface Props {
+    className?: string;
+    nodes: TreeNodeType[];
+    onSelect?: (id: string) => void;
+    level?: number;
+    showLoading?: boolean;
+}
+
+const Tree: React.FC<Props> = ({
+    className = '',
+    nodes = [],
+    onSelect,
+    level = 0,
+    showLoading = false,
+}) => (
+    <ul
+        className={classNames('tree', className)}
+    >
+        {nodes.map((treeNode) => {
+            const {
+                id,
+                title,
+                description,
+                avatar,
+                nodes,
+                hasNodes,
+                isOpen,
+            } = treeNode;
+            return (
+                <TreeNode
+                    key={id}
+                    title={title}
+                    description={description}
+                    avatar={avatar}
+                    nodes={nodes}
+                    hasNodes={hasNodes}
+                    isOpen={isOpen}
+                    onSelect={onSelect}
+                    className='tree__node'
+                    level={level + 1}
+                    id={id}
+                    showLoading={showLoading}
+                />
+            )
+        })}
+    </ul>
+)
 
 export default Tree;
