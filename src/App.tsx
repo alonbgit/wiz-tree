@@ -32,12 +32,6 @@ function App() {
     return (
       <FileDescription file={file} />
     );
-    const { lastModifiedDate, size, type, isDirectory } = file;
-    let description = `Last Modified: ${lastModifiedDate.toLocaleDateString('en-US')}, size: ${size}`;
-    if (!isDirectory) {
-      description = `${description}, MIME: ${type}`;
-    }
-    return description;
   }
 
   const createTreeNodeFromFile = (file: File) => {
