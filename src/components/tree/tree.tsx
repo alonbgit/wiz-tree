@@ -11,17 +11,10 @@ import './tree-node/tree-node.scss';
 
 const DEFAULT_AVATAR = <AccountCircleIcon color='primary' />;
 
-interface TreeNodeProps {
+interface TreeNodeProps extends TreeNodeType {
     className?: string;
-    title: string;
-    description: string | React.ReactNode;
-    avatar?: string | React.ReactNode;
-    nodes?: TreeNodeType[];
-    hasNodes?: boolean;
-    isOpen?: boolean;
     onSelect?: (id: string) => void;
     level: number;
-    id: string;
     showLoading?: boolean;
 }
 
