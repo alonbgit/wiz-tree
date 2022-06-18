@@ -1,15 +1,3 @@
-import React from "react";
-
-export interface TreeNodeType {
-    id: string;
-    title: string;
-    description: string | React.ReactNode;
-    avatar?: string | React.ReactNode;
-    nodes?: TreeNodeType[];
-    hasNodes?: boolean;
-    isOpen?: boolean;
-}
-
 export type Files = File[];
 
 export interface File {

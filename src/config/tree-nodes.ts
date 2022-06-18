@@ -1,4 +1,4 @@
-import { TreeNodeType } from '../types/types';
+import { TreeNodeType } from '../components/tree/types/types';
 
 const tree: TreeNodeType[] = [
     {

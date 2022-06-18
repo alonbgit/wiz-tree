@@ -4,7 +4,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import Collapse from '@mui/material/Collapse';
 import CircularProgress from '@mui/material/CircularProgress';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { TreeNodeType } from '../../types/types';
+import { TreeNodeType } from './types/types';
 
 import './tree.scss';
 import './tree-node/tree-node.scss';
@@ -106,7 +106,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                     )}
                 </div>
             </div>
-            {nodes && (
+            {hasChildren && (
                 <Collapse in={isNodeOpen}>
                     <Tree
                         nodes={nodes}

@@ -2,7 +2,8 @@ import { useEffect, useState, useMemo } from 'react';
 import Tree from './components/tree/tree';
 import TreeNodes from './config/tree-nodes';
 import filesService from './services/files-service';
-import { TreeNodeType, Files, File } from './types/types';
+import { Files, File } from './types/types';
+import { TreeNodeType } from './components/tree/types/types';
 import { getIconByFile } from './services/file-type-icons';
 import FileDescription from './components/file-description/file-description';
 
