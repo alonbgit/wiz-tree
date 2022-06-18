@@ -34,6 +34,11 @@ function App() {
     );
   }
 
+  const getIcon = (file: File) => {
+    const Icon = getIconByFile(file);
+    return <Icon color='primary' />;
+  }
+
   const createTreeNodeFromFile = (file: File) => {
     const { uId, name, isDirectory } = file;
     const treeNode: TreeNodeType = {
@@ -55,11 +60,6 @@ function App() {
         fillNode(newTreeNode, file, treeNodes);
       });
     }
-  }
-
-  const getIcon = (file: File) => {
-    const Icon = getIconByFile(file);
-    return <Icon color='primary' />;
   }
 
   const fileNodes = useMemo((): TreeNodeType[] => {
